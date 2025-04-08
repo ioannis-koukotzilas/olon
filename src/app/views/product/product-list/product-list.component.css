@@ -1,0 +1,5 @@
+:host > .wrapper {
+  max-width: var(--max-w-xl);
+  margin: 0 auto;
+  padding: 3rem 24px;
+}

@@ -1,0 +1,48 @@
+<div class="site-header">
+  <div class="wrapper">
+    <app-logo></app-logo>
+
+    <nav class="site-nav">
+      <ul>
+        <li><a routerLink="/products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</a></li>
+      </ul>
+
+      <div>Cart</div>
+
+      <div *ngIf="cart$ | async as cart">
+        <div class="cart-container">
+          <div class="cart-items">
+            <div *ngFor="let line of cart.lines" class="cart-item">
+              <div class="item-info">
+                <h4>{{ line.title }}</h4>
+                <p>Price: {{ line.price }}</p>
+              </div>
+
+              <div class="item-actions">
+                <input type="number" [(ngModel)]="line.quantity" min="1"
+                  (change)="updateQuantity(line.id, line.quantity)" class="quantity-input">
+
+                <button (click)="removeItem(line.id)" class="remove-btn">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-summary">
+            <p>Items: {{ cart.totalItems }}</p>
+            <p>Total: {{ cart.totalPrice }}</p>
+            <button (click)="checkout(cart)" class="checkout-btn">
+              Checkout
+            </button>
+          </div>
+
+          <div *ngIf="cart.lines.length === 0" class="empty-cart">
+            Your cart is empty
+          </div>
+        </div>
+      </div>
+
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+.site-header {
+}
+
+.site-header > .wrapper {
+  max-width: var(--max-w-full);
+  margin: 0 auto;
+  padding: 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.site-header .site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.site-header .site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.site-header .site-nav .cart {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}

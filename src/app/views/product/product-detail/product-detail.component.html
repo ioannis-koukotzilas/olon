@@ -1,0 +1,26 @@
+<div *ngIf="product" class="product">
+  <div class="wrapper">
+    <div class="col">
+      <ul class="product-images">
+        <li *ngFor="let img of product.images">
+          <img [src]="img.src" alt="">
+        </li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h1 class="product-title">{{ product.title }}</h1>
+      <p class="product-description"> {{ product.description }}</p>
+
+      <div class="price">{{ selectedPrice }}</div>
+
+      <ul *ngIf="product.variants.length > 1" class="variant-selector">
+        <li *ngFor="let variant of product.variants">
+          <button (click)="onVariantSelect(variant)">{{ variant.selectedOption.value }}</button>
+        </li>
+      </ul>
+
+      <button class="btn" (click)="addToCart()">Add to cart</button>
+    </div>
+  </div>
+</div>
