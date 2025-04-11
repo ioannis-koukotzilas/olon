@@ -5,6 +5,8 @@ export class Product {
   description!: string;
   variants: Variant[] = [];
   images: ProductImage[] = [];
+  howToUse?: HowToUse | null;
+  details?: Details | null;
 }
 
 export class Variant {
@@ -25,4 +27,16 @@ export class SelectedOption {
 
 export class ProductImage {
   src!: string;
+}
+
+export class HowToUse {
+  title?: string;
+  description?: string;
+  imageSrc?: string;
+}
+
+export class Details {
+  title?: string;
+  description?: string;
+  imageSrc?: string;
 }

@@ -56,6 +56,28 @@ const PRODUCT = gql`
           src
         }
       }
+
+      metafields(
+        identifiers: [
+          { namespace: "custom", key: "how_to_use_title" }
+          { namespace: "custom", key: "how_to_use_description" }
+          { namespace: "custom", key: "how_to_use_image" }
+          { namespace: "custom", key: "details_title" }
+          { namespace: "custom", key: "details_description" }
+          { namespace: "custom", key: "details_image" }
+        ]
+      ) {
+        key
+        value
+        reference {
+          ... on MediaImage {
+            image {
+              url(transform: { maxWidth: 1280 })
+            }
+          }
+          
+        }
+      }
     }
   }
 `;

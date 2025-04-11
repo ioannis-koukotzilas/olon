@@ -23,4 +23,12 @@
       <button class="btn" (click)="addToCart()">Add to cart</button>
     </div>
   </div>
+
+  <div *ngIf="product.howToUse" class="how-to-use">
+    <h2>{{ product.howToUse.title }}</h2>
+    <p>{{ product.howToUse.description }}</p>
+    <img [src]="product.howToUse.imageSrc" alt="">
+  </div>
+
+
 </div>

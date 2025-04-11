@@ -1,6 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ShopifyService } from '../../../services/shopify.service';
 import {
+  Details,
+  HowToUse,
   PriceV2,
   Product,
   ProductImage,
@@ -19,21 +21,32 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
   private route = inject(ActivatedRoute);
   private shopifyService = inject(ShopifyService);
   private cartService = inject(CartService);
+  private cd = inject(ChangeDetectorRef);
 
   product!: Product;
 
   selectedVariantId!: string;
   selectedPrice!: string;
 
+  constructor() {
+    console.log("1");
+  }
+
   ngOnInit(): void {
     this.checkRouteParams();
+    console.log("2");
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   private checkRouteParams(): void {
@@ -45,18 +58,26 @@ export class ProductDetailComponent implements OnInit {
         }),
         tap((response: any) => {
           this.product = this.initProduct(response.data.product);
+          console.log("3");
         })
       )
       .subscribe({
         next: () => {
           this.selectedVariantId = this.product.variants[0].id;
-          this.selectedPrice = this.product.variants[0].priceV2.amount + this.product.variants[0].priceV2.currencyCode;
+          this.selectedPrice =
+            this.product.variants[0].priceV2.amount +
+            this.product.variants[0].priceV2.currencyCode;
+
+            console.log("4");
+
+          //  this.cd.markForCheck();
         },
         error: (error) => {
           console.error('Error:', error);
         },
         complete() {
           console.log('observable completed');
+          console.log("5");
         },
       });
 
@@ -71,6 +92,8 @@ export class ProductDetailComponent implements OnInit {
       description: product.description,
       variants: this.initProductVariants(product.variants),
       images: this.initProductImages(product.images),
+      howToUse: this.initHowToUse(product.metafields),
+      details: this.initDetails(product.metafields),
     };
   }
 
@@ -116,6 +139,55 @@ export class ProductDetailComponent implements OnInit {
     });
 
     return returnValue;
+  }
+
+  private initHowToUse(metafields: any[]): HowToUse | null {
+    if (!metafields) return null;
+
+    const title =
+      metafields.find((x) => x?.key === 'how_to_use_title')?.value ?? null;
+
+    const description =
+      metafields.find((x) => x?.key === 'how_to_use_description')?.value ??
+      null;
+    const imageSrc =
+      metafields.find((x) => x?.key === 'how_to_use_image')?.reference?.image
+        ?.url ?? null;
+
+    if (!title || !description || !imageSrc) {
+      return null;
+    }
+
+    return {
+      title: title,
+      description: description,
+      imageSrc: imageSrc,
+    };
+  }
+
+  private initDetails(metafields: any[]): Details | null {
+    if (!metafields) return null;
+
+    const title =
+      metafields.find((x) => x?.key === 'details_title')?.value ?? null;
+
+    const description =
+      metafields.find((x) => x?.key === 'how_to_use_description')?.value ??
+      null;
+
+    const imageSrc =
+      metafields.find((x) => x?.key === 'how_to_use_image')?.reference?.image
+        ?.url ?? null;
+
+    if (!title || !description || !imageSrc) {
+      return null;
+    }
+
+    return {
+      title: title,
+      description: description,
+      imageSrc: imageSrc,
+    };
   }
 
   onVariantSelect(variant: Variant): void {
