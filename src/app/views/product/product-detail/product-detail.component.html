@@ -1,34 +1,78 @@
 <div *ngIf="product" class="product">
-  <div class="wrapper">
-    <div class="col">
-      <ul class="product-images">
-        <li *ngFor="let img of product.images">
-          <img [src]="img.src" alt="">
-        </li>
-      </ul>
-    </div>
+  <div class="main">
+    <div class="wrapper">
 
-    <div class="col">
-      <h1 class="product-title">{{ product.title }}</h1>
-      <p class="product-description"> {{ product.description }}</p>
+      <div class="col">
+        <div class="wrapper">
+          <ul class="images">
+            <li *ngFor="let img of product.images">
+              <img [src]="img.src" alt="" />
+            </li>
+          </ul>
+        </div>
+      </div>
 
-      <div class="price">{{ selectedPrice }}</div>
+      <div class="col">
+        <div class="wrapper">
+          <h1 class="title">{{ product.title }}</h1>
+          <p class="description">{{ product.description }}</p>
 
-      <ul *ngIf="product.variants.length > 1" class="variant-selector">
-        <li *ngFor="let variant of product.variants">
-          <button (click)="onVariantSelect(variant)">{{ variant.selectedOption.value }}</button>
-        </li>
-      </ul>
+          <div *ngIf="product.variants && product.variants.length > 1" class="variant-selector">
+            <ul class="variations">
+              <li *ngFor="let variant of product.variants; let i = index">
+                <button class="btn variation" [class.active]="activeVariantIndex === i" (click)="onVariantSelect(variant, i)">
+                  {{ variant.selectedOption.value }}
+                </button>
+              </li>
+            </ul>
 
-      <button class="btn" (click)="addToCart()">Add to cart</button>
+            <div class="customize">CUSTOMIZE IT – Choose a thread to make your customized toothbrush</div>
+
+          </div>
+
+          <div class="price">{{ selectedPrice }}</div>
+
+          <button class="btn add-to-cart" (click)="addToCart()">Add to cart</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <div *ngIf="product.howToUse" class="how-to-use">
-    <h2>{{ product.howToUse.title }}</h2>
-    <p>{{ product.howToUse.description }}</p>
-    <img [src]="product.howToUse.imageSrc" alt="">
+    <div class="wrapper">
+      <div class="col">
+        <div class="wrapper">
+          
+          <h2 class="title">{{ product.howToUse.title }}</h2>
+         
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="wrapper">
+          <div class="label">How to use</div>
+          <p class="description">{{ product.howToUse.description }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <div *ngIf="product.details" class="details">
+    <div class="wrapper">
+      <div class="col">
+        <div class="wrapper">
+          <img [src]="product.details.imageSrc" alt="" />
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="wrapper">
+          <div class="label">Details</div>
+          <h2 class="title">{{ product.details.title }}</h2>
+          <div class="description" [innerHTML]="product.details.description"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

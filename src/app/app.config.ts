@@ -10,17 +10,22 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { HttpHeaders, provideHttpClient } from '@angular/common/http';
+import {
+  HttpHeaders,
+  provideHttpClient,
+  withFetch,
+} from '@angular/common/http';
 import { provideNamedApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
 
     provideNamedApollo(() => {
       const httpLink = inject(HttpLink);
@@ -44,5 +49,7 @@ export const appConfig: ApplicationConfig = {
         },
       };
     }),
+
+    provideAnimations(),
   ],
 };

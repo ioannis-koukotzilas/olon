@@ -1,4 +1,5 @@
 .site-header {
+  font-weight: var(--font-medium);
 }
 
 .site-header > .wrapper {
@@ -12,20 +13,10 @@
   gap: 1.5rem;
 }
 
-.site-header .site-nav {
+.site-header .primary-nav ul,
+.site-header .secondary-nav ul {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
 
-.site-header .site-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.site-header .site-nav .cart {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}

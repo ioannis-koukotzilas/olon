@@ -36,6 +36,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   selectedVariantId!: string;
   selectedPrice!: string;
 
+  activeVariantIndex: number = 0;
+
   constructor() {
     console.log("1");
   }
@@ -70,7 +72,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
             console.log("4");
 
-          //  this.cd.markForCheck();
+            this.cd.markForCheck();
         },
         error: (error) => {
           console.error('Error:', error);
@@ -172,11 +174,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       metafields.find((x) => x?.key === 'details_title')?.value ?? null;
 
     const description =
-      metafields.find((x) => x?.key === 'how_to_use_description')?.value ??
+      metafields.find((x) => x?.key === 'details_description')?.value ??
       null;
 
     const imageSrc =
-      metafields.find((x) => x?.key === 'how_to_use_image')?.reference?.image
+      metafields.find((x) => x?.key === 'details_image')?.reference?.image
         ?.url ?? null;
 
     if (!title || !description || !imageSrc) {
@@ -190,9 +192,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     };
   }
 
-  onVariantSelect(variant: Variant): void {
+  onVariantSelect(variant: Variant, index: number): void {
     this.selectedVariantId = variant.id;
     this.selectedPrice = variant.priceV2.amount + variant.priceV2.currencyCode;
+    this.activeVariantIndex = index;
   }
 
   addToCart(): void {

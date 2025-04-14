@@ -72,7 +72,7 @@ const PRODUCT = gql`
         reference {
           ... on MediaImage {
             image {
-              url(transform: { maxWidth: 1280 })
+              url(transform: { maxWidth: 2048 })
             }
           }
           

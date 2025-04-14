@@ -12,19 +12,33 @@
   src: url("../../fonts/material-symbols/material-symbols-outlined.woff2") format("woff2");
 } */
 
-/* GT America Standard
+/* Proxima Nova
 --------------------------------------------- */
 
 @font-face {
-  font-family: "Averta";
+  font-family: "Proxima Nova";
   font-style: normal;
-  font-weight: 400;
-  src: url("../../assets/fonts/averta/AvertaPE-Regular.woff2") format("woff2");
+  font-weight: 300;
+  src: url("../../assets/fonts/proxima-nova/ProximaNova-Light.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Averta";
-  font-style: italic;
+  font-family: "Proxima Nova";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/fonts/proxima-nova/ProximaNova-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Proxima Nova";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../../assets/fonts/proxima-nova/ProximaNova-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Proxima Nova";
+  font-style: normal;
   font-weight: 600;
-  src: url("../../assets/fonts/averta/AvertaPE-Semibold.woff2") format("woff2");
+  src: url("../../assets/fonts/proxima-nova/ProximaNova-SemiBold.woff2") format("woff2");
 }

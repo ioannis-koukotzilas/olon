@@ -1,0 +1,26 @@
+.app-footer {
+  background-color: rgb(var(--base-950));
+  color: rgb(var(--base-50));
+  margin-top: 4.5rem;
+}
+
+.app-footer app-logo {
+  display: flex;
+  padding: 4.5rem 48px 0;
+}
+
+.app-footer > .wrapper {
+  max-width: var(--max-w-full);
+  padding: 4.5rem 48px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.app-footer > .wrapper > .col > .title {
+  font-weight: var(--font-medium);
+  border-bottom: 1px solid #fff;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}

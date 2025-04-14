@@ -1,15 +1,31 @@
+<app-cart [cartActive]="cartActive"></app-cart>
+
 <div class="site-header">
   <div class="wrapper">
     <app-logo></app-logo>
 
-    <nav class="site-nav">
+    <nav class="primary-nav">
       <ul>
-        <li><a routerLink="/products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</a></li>
+        <li><a routerLink="products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</a></li>
+        <li><a routerLink="about" routerLinkActive="active" ariaCurrentWhenActive="page">Our story</a></li>
       </ul>
+    </nav>
 
-      <div>Cart</div>
+    <nav class="secondary-nav">
 
-      <div *ngIf="cart$ | async as cart">
+
+      <button class="toggle-sidebar-btn transparent" (click)="onCartToggle()">
+        <span class="symbol">{{ cartActive ? "close" : "menu" }}</span>
+      </button>
+
+     <ul>
+      <li>Cart</li>
+      <li>En</li>
+     </ul>
+
+      
+
+      <!-- <div *ngIf="cart$ | async as cart">
         <div class="cart-container">
           <div class="cart-items">
             <div *ngFor="let line of cart.lines" class="cart-item">
@@ -41,7 +57,7 @@
             Your cart is empty
           </div>
         </div>
-      </div>
+      </div> -->
 
     </nav>
   </div>
