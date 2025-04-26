@@ -5,10 +5,6 @@
 /* Main
 --------------------------------------------- */
 
-.product .main {
-  /* margin-bottom: 4.5rem; */
-}
-
 .product .main > .wrapper {
   max-width: var(--max-w-xxl);
   margin: 0 auto;
@@ -16,13 +12,6 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.25rem;
   align-items: center;
-}
-
-.product .main > .wrapper .col:nth-child(1) > .wrapper {
-  /* min-height: calc(100vh - 84px); 
-  display: flex;
-  flex-direction: column;
-  justify-content: center; */
 }
 
 .product .main > .wrapper .col:nth-child(2) > .wrapper {
@@ -68,6 +57,7 @@
 .product .title {
   font-size: var(--font-3xl);
   line-height: var(--leading-tight);
+  font-weight: var(--font-regular);
   margin-bottom: 1.5rem;
 }
 

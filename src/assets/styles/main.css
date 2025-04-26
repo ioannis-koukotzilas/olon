@@ -104,6 +104,10 @@ a:active {
 /* Buttons
 --------------------------------------------- */
 
+button {
+  cursor: pointer;
+}
+
 .btn {
   background-color: #252525;
   color: #fffef2;
@@ -159,14 +163,13 @@ a:active {
 }
 
 /*--------------------------------------------------------------
-# Symbol
+# Symbols
 --------------------------------------------------------------*/
 
 .symbol {
-  font-family: var(--font-symbol);
   font-weight: normal;
   font-style: normal;
-  font-size: var(--font-2xl);
+  font-size: 24px;
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
@@ -178,12 +181,33 @@ a:active {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga";
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 48;
+}
+
+.symbol.outlined {
+  font-family: var(--font-symbol-outlined);
+}
+
+.symbol.rounded {
+  font-family: var(--font-symbol-rounded);
 }
 
 .symbol::after {
   display: inline-block;
 }
 
+.btn-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  background-color: unset;
+  padding: unset;
+  margin: unset;
+  border: unset;
+
+ & .symbol {
+    font-size: var(--font-3xl);
+  }
+}
 

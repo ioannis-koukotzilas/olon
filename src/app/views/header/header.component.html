@@ -4,61 +4,67 @@
   <div class="wrapper">
     <app-logo></app-logo>
 
-    <nav class="primary-nav">
-      <ul>
-        <li><a routerLink="products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</a></li>
-        <li><a routerLink="about" routerLinkActive="active" ariaCurrentWhenActive="page">Our story</a></li>
-      </ul>
-    </nav>
-
     <nav class="secondary-nav">
 
+      <button class="btn-symbol" (click)="onCartToggle()">
+        <span class="symbol rounded">{{ cartActive ? "close" : "shopping_bag" }}</span>
 
-      <button class="toggle-sidebar-btn transparent" (click)="onCartToggle()">
-        <span class="symbol">{{ cartActive ? "close" : "menu" }}</span>
+        <ng-container *ngIf="cart?.totalItems">
+          <span class="total-items">{{ cart?.totalItems }}</span>
+        </ng-container>
       </button>
 
-     <ul>
-      <li>Cart</li>
-      <li>En</li>
-     </ul>
-
-      
-
-      <!-- <div *ngIf="cart$ | async as cart">
-        <div class="cart-container">
-          <div class="cart-items">
-            <div *ngFor="let line of cart.lines" class="cart-item">
-              <div class="item-info">
-                <h4>{{ line.title }}</h4>
-                <p>Price: {{ line.price }}</p>
-              </div>
-
-              <div class="item-actions">
-                <input type="number" [(ngModel)]="line.quantity" min="1"
-                  (change)="updateQuantity(line.id, line.quantity)" class="quantity-input">
-
-                <button (click)="removeItem(line.id)" class="remove-btn">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="cart-summary">
-            <p>Items: {{ cart.totalItems }}</p>
-            <p>Total: {{ cart.totalPrice }}</p>
-            <button (click)="checkout(cart)" class="checkout-btn">
-              Checkout
-            </button>
-          </div>
-
-          <div *ngIf="cart.lines.length === 0" class="empty-cart">
-            Your cart is empty
-          </div>
-        </div>
-      </div> -->
+      <button class="btn-symbol" (click)="onMainNavigationPanelToggle()" >
+        <span class="symbol rounded">{{ mainNavigationPanelActive ? "close" : "menu" }}</span>
+      </button>
 
     </nav>
   </div>
 </div>
+
+<aside class="main-navigation-panel" [class.active]="mainNavigationPanelActive">
+  <div class="wrapper">
+
+    <app-logo [logoMode]="mode.light"></app-logo>
+
+    <div class="nav">
+
+    <div class="col">
+      <div class="title">Products</div>
+      <ul>
+        <li>Natural Toothbrush</li>
+        <li>Tooth Paste</li>
+        <li>Mouthwash</li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <div class="title">About</div>
+      <ul>
+        <li>Our story</li>
+        <li>Foundation</li>
+        <li>Privacy policy</li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <div class="title">Order and support</div>
+      <ul>
+        <li>FAQs</li>
+        <li>Contact us</li>
+        <li>Delivery and returns</li>
+        <li>Terms and conditions</li>
+      </ul>
+    </div>
+
+  </div>
+
+<!-- <ul>
+  <li><a routerLink="products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</a></li>
+  <li><a routerLink="about" routerLinkActive="active" ariaCurrentWhenActive="page">Our story</a></li>
+</ul> -->
+
+    
+
+  </div>
+</aside>

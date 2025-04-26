@@ -32,7 +32,13 @@
 
           <div class="price">{{ selectedPrice }}</div>
 
-          <button class="btn add-to-cart" (click)="addToCart()">Add to cart</button>
+          <button class="btn add-to-cart" (click)="addToCart()" [disabled]="isAddingToCart">
+            <span *ngIf="!isAddingToCart">Add to cart</span>
+            <span *ngIf="isAddingToCart">
+              
+              Adding...
+            </span>
+          </button>
         </div>
       </div>
     </div>

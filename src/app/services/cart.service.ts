@@ -1,7 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { ShopifyService } from './shopify.service';
-import { BehaviorSubject, take } from 'rxjs';
-import { Cart } from '../models/cart/cart';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
+import { Cart, CartLine } from '../models/cart/cart';
 import { CartLineInput } from '../models/cart/cartLineInput';
 import { StorageService } from './storage.service';
 
@@ -32,26 +40,28 @@ export class CartService {
       });
   }
 
-  addItem(line: CartLineInput): void {
+  addItem(line: CartLineInput): Observable<void> {
     const currentCart = this.cartSubject.value;
 
-    if (currentCart.id) {
-      this.shopifyService
-        .addToCart(currentCart.id, [line])
-        .pipe(take(1))
-        .subscribe({
-          next: (res) => this.handleResponse(res.data?.cartLinesAdd),
-          error: (err) => console.error('Add to cart error:', err),
-        });
-    } else {
-      this.shopifyService
-        .createCart({ lines: [line] })
-        .pipe(take(1))
-        .subscribe({
-          next: (res) => this.handleResponse(res.data?.cartCreate),
-          error: (err) => console.error('Create cart error:', err),
-        });
-    }
+    const operation$ = currentCart.id
+      ? this.shopifyService.addToCart(currentCart.id, [line])
+      : this.shopifyService.createCart({ lines: [line] });
+
+    return operation$.pipe(
+      take(1),
+      tap((res) => {
+        const responseData = currentCart.id
+          ? res.data?.cartLinesAdd
+          : res.data?.cartCreate;
+        this.handleResponse(responseData);
+      }),
+      // Convert to void observable to prevent exposing internal response
+      map(() => undefined),
+      catchError((error) => {
+        console.error('Cart operation failed:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   removeItem(lineId: string): void {
@@ -87,19 +97,25 @@ export class CartService {
     }
 
     const shopifyCart = response.cart;
-    const cart = new Cart();
+    const lines: CartLine[] = [];
 
-    cart.id = shopifyCart.id;
-    cart.checkoutUrl = shopifyCart.checkoutUrl;
-    cart.totalPrice = shopifyCart.cost.totalAmount.amount;
-    cart.totalItems = shopifyCart.totalQuantity;
-    cart.lines = shopifyCart.lines.edges.map((edge: any) => ({
-      id: edge.node.id,
-      quantity: edge.node.quantity,
-      merchandiseId: edge.node.merchandise.id,
-      title: edge.node.merchandise.product.title,
-      price: edge.node.cost.totalAmount.amount,
-    }));
+    shopifyCart.lines.nodes.forEach((node: any) => {
+      lines.push({
+        id: node.id,
+        quantity: node.quantity,
+        merchandiseId: node.merchandise.id,
+        title: node.merchandise.product.title,
+        price: node.cost.totalAmount.amount,
+      });
+    });
+
+    const cart: Cart = {
+      id: shopifyCart.id,
+      checkoutUrl: shopifyCart.checkoutUrl,
+      totalPrice: shopifyCart.cost.totalAmount.amount,
+      totalItems: shopifyCart.totalQuantity,
+      lines: lines,
+    };
 
     this.cartSubject.next(cart);
     this.storageService.saveCart(cart.id!);

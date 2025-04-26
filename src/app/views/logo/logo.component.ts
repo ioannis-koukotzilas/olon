@@ -1,17 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Mode } from '../../enums/mode';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-logo',
-  imports: [RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.css',
 })
 export class LogoComponent {
-  @Input() mode?: Mode = Mode.dark;
+  @Input() logoMode?: Mode = Mode.dark;
 
-  get fillColor(): string {
-    return this.mode === Mode.light ? '#FFFFFF' : '#000000';
-  }
+  mode = Mode;
 }

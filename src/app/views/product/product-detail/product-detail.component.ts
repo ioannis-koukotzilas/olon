@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ShopifyService } from '../../../services/shopify.service';
 import {
   Details,
@@ -39,12 +46,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   activeVariantIndex: number = 0;
 
   constructor() {
-    console.log("1");
   }
 
   ngOnInit(): void {
     this.checkRouteParams();
-    console.log("2");
   }
 
   ngOnDestroy(): void {
@@ -60,7 +65,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }),
         tap((response: any) => {
           this.product = this.initProduct(response.data.product);
-          console.log("3");
         })
       )
       .subscribe({
@@ -70,16 +74,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.product.variants[0].priceV2.amount +
             this.product.variants[0].priceV2.currencyCode;
 
-            console.log("4");
-
-            this.cd.markForCheck();
+          this.cd.markForCheck();
         },
         error: (error) => {
           console.error('Error:', error);
         },
         complete() {
           console.log('observable completed');
-          console.log("5");
         },
       });
 
@@ -174,8 +175,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       metafields.find((x) => x?.key === 'details_title')?.value ?? null;
 
     const description =
-      metafields.find((x) => x?.key === 'details_description')?.value ??
-      null;
+      metafields.find((x) => x?.key === 'details_description')?.value ?? null;
 
     const imageSrc =
       metafields.find((x) => x?.key === 'details_image')?.reference?.image
@@ -198,12 +198,22 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.activeVariantIndex = index;
   }
 
+  isAddingToCart = false;
+
   addToCart(): void {
+    this.isAddingToCart = true;
+
     const input: CartLineInput = {
       merchandiseId: this.selectedVariantId,
       quantity: 1,
     };
 
-    this.cartService.addItem(input);
+    this.cartService
+      .addItem(input)
+      .pipe(take(1))
+      .subscribe({
+        next: () => (this.isAddingToCart = false),
+        error: () => (this.isAddingToCart = false),
+      });
   }
 }

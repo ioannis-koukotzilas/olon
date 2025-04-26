@@ -16,9 +16,9 @@ export class CartComponent {
   private document = inject(DOCUMENT);
   private cartService = inject(CartService);
 
-  private _cartActive = false;
-
   cartContent$ = this.cartService.cart$;
+
+  private _cartActive = false;
 
   @Input()
   get cartActive(): boolean {

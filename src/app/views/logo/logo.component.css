@@ -1,5 +1,3 @@
-.site-title svg {
-  display: block;
-  width: 100%;
-  height: 36px;
+img {
+  max-height: 36px;
 }

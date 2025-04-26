@@ -75,7 +75,6 @@ const PRODUCT = gql`
               url(transform: { maxWidth: 2048 })
             }
           }
-          
         }
       }
     }
@@ -95,22 +94,20 @@ const CREATE_CART = gql`
         }
         totalQuantity
         lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  product {
-                    title
-                  }
+          nodes {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  title
                 }
               }
-              cost {
-                totalAmount {
-                  amount
-                }
+            }
+            cost {
+              totalAmount {
+                amount
               }
             }
           }
@@ -137,22 +134,20 @@ const CART_LINES_ADD = gql`
         }
         totalQuantity
         lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  product {
-                    title
-                  }
+          nodes {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  title
                 }
               }
-              cost {
-                totalAmount {
-                  amount
-                }
+            }
+            cost {
+              totalAmount {
+                amount
               }
             }
           }
@@ -179,22 +174,20 @@ const CART_LINES_UPDATE = gql`
         }
         totalQuantity
         lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  product {
-                    title
-                  }
+          nodes {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  title
                 }
               }
-              cost {
-                totalAmount {
-                  amount
-                }
+            }
+            cost {
+              totalAmount {
+                amount
               }
             }
           }
@@ -221,22 +214,20 @@ const CART_LINES_REMOVE = gql`
         }
         totalQuantity
         lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  product {
-                    title
-                  }
+          nodes {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  title
                 }
               }
-              cost {
-                totalAmount {
-                  amount
-                }
+            }
+            cost {
+              totalAmount {
+                amount
               }
             }
           }
@@ -262,22 +253,20 @@ const CART_GET = gql`
       }
       totalQuantity
       lines(first: 100) {
-        edges {
-          node {
-            id
-            quantity
-            merchandise {
-              ... on ProductVariant {
-                id
-                product {
-                  title
-                }
+        nodes {
+          id
+          quantity
+          merchandise {
+            ... on ProductVariant {
+              id
+              product {
+                title
               }
             }
-            cost {
-              totalAmount {
-                amount
-              }
+          }
+          cost {
+            totalAmount {
+              amount
             }
           }
         }
