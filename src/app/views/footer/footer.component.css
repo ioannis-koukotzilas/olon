@@ -1,7 +1,7 @@
 .app-footer {
   background-color: rgb(var(--base-950));
   color: rgb(var(--base-50));
-  margin-top: 4.5rem;
+  /* margin-top: 4.5rem; */
 }
 
 .app-footer app-logo {

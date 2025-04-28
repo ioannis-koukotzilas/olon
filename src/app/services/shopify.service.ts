@@ -1,8 +1,10 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { CartLineInput } from '../models/cart/cartLineInput';
 import { Observable } from 'rxjs';
 import { CartLineUpdate } from '../models/cart/cartLineUpdate';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageCode } from '../enums/languageCode';
 
 const GET_SHOP = gql`
   query {
@@ -25,7 +27,8 @@ const PRODUCTS = gql`
 `;
 
 const PRODUCT = gql`
-  query getProduct($handle: String!) {
+  query getProduct($handle: String!, $language: LanguageCode!)
+  @inContext(language: $language) {
     product(handle: $handle) {
       id
       handle
@@ -279,7 +282,13 @@ const CART_GET = gql`
   providedIn: 'root',
 })
 export class ShopifyService {
-  private apollo = inject(Apollo);
+  constructor(private apollo: Apollo, private translate: TranslateService) {}
+
+  private mapToLanguageCode(currentLang: string): LanguageCode {
+    return currentLang.toLowerCase() === 'el'
+      ? LanguageCode.EL
+      : LanguageCode.EN;
+  }
 
   getShopName() {
     return this.apollo.use('shopify').query({
@@ -297,7 +306,11 @@ export class ShopifyService {
   getProduct(handle: string) {
     return this.apollo.use('shopify').query({
       query: PRODUCT,
-      variables: { handle },
+      variables: {
+        handle,
+        language: this.mapToLanguageCode(this.translate.currentLang),
+      },
+      fetchPolicy: 'no-cache',
     });
   }
 

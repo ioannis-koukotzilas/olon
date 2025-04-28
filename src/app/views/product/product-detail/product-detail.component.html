@@ -1,3 +1,9 @@
+<!-- <ng-container *ngIf="!(loading$ | async); else productTemplate"></ng-container> -->
+
+<ng-container *ngIf="loading$ | async; else productTemplate"></ng-container>
+
+
+<ng-template #productTemplate>
 <div *ngIf="product" class="product">
   <div class="main">
     <div class="wrapper">
@@ -82,3 +88,5 @@
   </div>
 
 </div>
+
+</ng-template>

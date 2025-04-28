@@ -6,33 +6,66 @@ import { Mode } from '../../enums/mode';
 import { CartService } from '../../services/cart.service';
 import { Cart } from '../../models/cart/cart';
 import { Subscription } from 'rxjs';
+import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
+import { Router, RouterLink } from '@angular/router';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, CartComponent, LogoComponent],
+  imports: [
+    RouterLink,
+    CommonModule,
+    CartComponent,
+    LogoComponent,
+    LanguageSelectorComponent,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  private sub = new Subscription();
+  private subscription = new Subscription();
 
-  private cartService = inject(CartService);
-
+  currentLang!: string;
   cart: Cart | null = null;
-  
+
   mode = Mode;
-  
+
   cartActive: boolean = false;
   mainNavigationPanelActive: boolean = false;
 
+  constructor(
+    private translate: TranslateService,
+    private cartService: CartService,
+    private router: Router,
+  ) {}
+
   ngOnInit() {
-    this.sub = this.cartService.cart$.subscribe(cart => {
+    this.getLang();
+    this.getCart();
+  }
+
+  getLang(): void {
+    this.currentLang = this.translate.currentLang;
+
+    const langSub = this.translate.onLangChange.subscribe(
+      (e: LangChangeEvent) => {
+        this.currentLang = e.lang.toLowerCase();
+      }
+    );
+
+    this.subscription.add(langSub);
+  }
+
+  getCart(): void {
+    const cartSub = this.cartService.cart$.subscribe((cart: Cart) => {
       this.cart = cart;
     });
+
+    this.subscription.add(cartSub);
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   onCartToggle(): void {
@@ -41,5 +74,10 @@ export class HeaderComponent {
 
   onMainNavigationPanelToggle(): void {
     this.mainNavigationPanelActive = !this.mainNavigationPanelActive;
+  }
+
+  navigateAfterCloseSidebar(route: any[]): void {
+    this.onMainNavigationPanelToggle();
+    this.router.navigate(route);
   }
 }

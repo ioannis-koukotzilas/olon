@@ -2,6 +2,21 @@
 # Base
 --------------------------------------------------------------*/
 
+body {
+  margin: 0;
+}
+
+app-root {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  grid-template-rows: auto minmax(0,1fr) auto
+}
+
+.app-main {
+  position: relative;
+}
+
 /* Box sizing
 --------------------------------------------- */
 

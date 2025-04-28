@@ -17,26 +17,25 @@ import {
   Variant,
 } from '../../../models/product';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, switchMap, take, tap } from 'rxjs';
+import { Observable, Subscription, switchMap, take, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../services/cart.service';
 import { CartLineInput } from '../../../models/cart/cartLineInput';
 import { FormsModule } from '@angular/forms';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe, TranslateDirective],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
-  private route = inject(ActivatedRoute);
-  private shopifyService = inject(ShopifyService);
-  private cartService = inject(CartService);
-  private cd = inject(ChangeDetectorRef);
+  loading$: Observable<boolean>;
 
   product!: Product;
 
@@ -45,7 +44,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   activeVariantIndex: number = 0;
 
-  constructor() {
+  constructor(
+    private route: ActivatedRoute,
+    private shopifyService: ShopifyService,
+    private cartService: CartService,
+    private cd: ChangeDetectorRef,
+    private loadingService: LoadingService
+  ) {
+    this.loadingService.set(true);
+    this.loading$ = this.loadingService.loading$;
   }
 
   ngOnInit(): void {
@@ -74,6 +81,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.product.variants[0].priceV2.amount +
             this.product.variants[0].priceV2.currencyCode;
 
+          // setTimeout(() => {
+
+          // }, 5000);
+
+          this.loadingService.set(false);
           this.cd.markForCheck();
         },
         error: (error) => {

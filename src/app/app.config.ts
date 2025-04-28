@@ -3,14 +3,16 @@ import {
   inject,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouteReuseStrategy, withEnabledBlockingInitialNavigation } from '@angular/router';
 
 import { routes } from './app.routes';
 import {
   provideClientHydration,
   withEventReplay,
+  withIncrementalHydration,
 } from '@angular/platform-browser';
 import {
+  HttpClient,
   HttpHeaders,
   provideHttpClient,
   withFetch,
@@ -18,14 +20,29 @@ import {
 import { provideNamedApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AppReuseStrategy } from './strategy/app-reuse.strategy';
+
+const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (
+  http: HttpClient
+) => new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideClientHydration(withEventReplay()),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
+    { provide: RouteReuseStrategy, useClass: AppReuseStrategy },
+    provideClientHydration(withIncrementalHydration()),
     provideHttpClient(withFetch()),
+
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
 
     provideNamedApollo(() => {
       const httpLink = inject(HttpLink);
@@ -49,7 +66,5 @@ export const appConfig: ApplicationConfig = {
         },
       };
     }),
-
-    provideAnimations(),
   ],
 };

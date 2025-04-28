@@ -6,6 +6,8 @@
 
     <nav class="secondary-nav">
 
+      <app-language-selector></app-language-selector>
+
       <button class="btn-symbol" (click)="onCartToggle()">
         <span class="symbol rounded">{{ cartActive ? "close" : "shopping_bag" }}</span>
 
@@ -29,12 +31,15 @@
 
     <div class="nav">
 
+      <li><a [routerLink]="['/', currentLang]">Home</a></li>
+
     <div class="col">
       <div class="title">Products</div>
       <ul>
-        <li>Natural Toothbrush</li>
+        <li><a routerLinkActive="active" (click)="navigateAfterCloseSidebar(['/', currentLang, 'product', 'test-product'])">Natural Toothbrush</a></li>
         <li>Tooth Paste</li>
         <li>Mouthwash</li>
+        <li><a [routerLink]="['/', currentLang, 'products']">All products</a></li>
       </ul>
     </div>
 
@@ -58,13 +63,6 @@
     </div>
 
   </div>
-
-<!-- <ul>
-  <li><a routerLink="products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</a></li>
-  <li><a routerLink="about" routerLinkActive="active" ariaCurrentWhenActive="page">Our story</a></li>
-</ul> -->
-
-    
 
   </div>
 </aside>
