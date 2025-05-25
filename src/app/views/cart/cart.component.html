@@ -1,4 +1,6 @@
-<div class="cart" [class.active]="cartActive" #cartRef>
+<div class="overlay" [class.visible]="cartVisible" (click)="onOverlayClick()"></div>
+
+<div class="cart" [class.visible]="cartVisible">
   <div class="wrapper">
 
     <div *ngIf="cartContent$ | async as cart">
@@ -7,25 +9,24 @@
 
         <ng-container *ngIf="cart.lines && cart.lines.length > 0; else emptyCart">
 
-          <ul class="cart-lines-titles">
-            <li>Cart</li>
-            <li>Quantity</li>
-            <li>Price</li>
-            <li>Action</li>
-          </ul>
-
           <ul class="cart-lines">
-            <li *ngFor="let line of cart.lines" class="cart-line">
-              <div class="title">{{ line.title }}</div>
-              <div class="quantity"><input type="number" [(ngModel)]="line.quantity" min="1"
-                (change)="updateQuantity(line.id, line.quantity)"></div>
-              
-              
-                <div class="price">{{ line.price }}</div>
-                <div class="action">
-                  <button class="btn remove" (click)="removeItem(line.id)">Remove</button>
+            <li *ngFor="let cartLine of cart.lines" class="cart-line">
+
+              <div class="wrapper">
+                <div class="col">
+                  <img [src]="cartLine.featuredImage?.src" [alt]="cartLine.featuredImage?.altText">
                 </div>
-              
+
+                <div class="col">
+                  <a class="title" [routerLink]="[currentLang, 'product', cartLine.handle]" routerLinkActive="active">{{ cartLine.title }}</a>
+                  <div class="price">{{ cartLine.price }}</div>
+                  <div class="quantity"><input type="number" [(ngModel)]="cartLine.quantity" min="1" (change)="updateQuantity(cartLine.id, cartLine.quantity)"></div>
+                  
+                  <div class="action">
+                    <button class="btn remove" (click)="removeItem(cartLine.id)">Remove</button>
+                  </div>
+                </div>
+              </div>
             </li>
           </ul>
 

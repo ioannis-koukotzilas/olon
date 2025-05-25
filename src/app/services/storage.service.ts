@@ -1,32 +1,21 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService {
-
   private readonly CART_KEY = 'cart_key';
 
-  saveCart(cartId: string): void {
-    try {
-      localStorage.setItem(this.CART_KEY, JSON.stringify(cartId));
-    } catch (error) {
-      console.error('Error saving cart to localStorage:', error);
-    }
+  setCartToLocalStorage(cartId: string): void {
+    localStorage.setItem(this.CART_KEY, JSON.stringify(cartId));
   }
 
-  loadCart(): string | null {
-    try {
-      const cartData = localStorage.getItem(this.CART_KEY);
-      return cartData ? JSON.parse(cartData) : null;
-    } catch (error) {
-      console.error('Error loading cart from localStorage:', error);
-      return null;
-    }
+  getCartFromLocalStorage(): string | null {
+    const cartData = localStorage.getItem(this.CART_KEY);
+    return cartData ? JSON.parse(cartData) : null;
   }
 
-  removeCart(): void {
+  removeCartFromLocalStorage(): void {
     localStorage.removeItem(this.CART_KEY);
   }
-
 }

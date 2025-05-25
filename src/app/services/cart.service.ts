@@ -12,6 +12,7 @@ import {
 import { Cart, CartLine } from '../models/cart/cart';
 import { CartLineInput } from '../models/cart/cartLineInput';
 import { StorageService } from './storage.service';
+import { ProductImage } from '../models/product';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +24,9 @@ export class CartService {
   private cartSubject = new BehaviorSubject<Cart>(new Cart());
   public cart$ = this.cartSubject.asObservable();
 
-  initCartFromStorage(): void {
-    const cartId = this.storageService.loadCart();
+  initCartFromLocalStorage(): void {
+    const cartId = this.storageService.getCartFromLocalStorage();
+
     if (cartId) {
       this.getCart(cartId);
     }
@@ -32,7 +34,7 @@ export class CartService {
 
   getCart(cartId: string): void {
     this.shopifyService
-      .getCart(cartId)
+      .cartGet(cartId)
       .pipe(take(1))
       .subscribe({
         next: (res) => this.handleResponse(res.data),
@@ -44,7 +46,7 @@ export class CartService {
     const currentCart = this.cartSubject.value;
 
     const operation$ = currentCart.id
-      ? this.shopifyService.addToCart(currentCart.id, [line])
+      ? this.shopifyService.cartLinesAdd(currentCart.id, [line])
       : this.shopifyService.createCart({ lines: [line] });
 
     return operation$.pipe(
@@ -69,7 +71,7 @@ export class CartService {
     if (!cart.id) return;
 
     this.shopifyService
-      .removeCartLines(cart.id, [lineId])
+      .cartLinesRemove(cart.id, [lineId])
       .pipe(take(1))
       .subscribe({
         next: (res) => this.handleResponse(res.data?.cartLinesRemove),
@@ -79,10 +81,11 @@ export class CartService {
 
   updateQuantity(lineId: string, quantity: number): void {
     const cart = this.cartSubject.value;
+
     if (!cart.id) return;
 
     this.shopifyService
-      .updateCartLines(cart.id, [{ id: lineId, quantity }])
+      .cartLinesUpdate(cart.id, [{ id: lineId, quantity }])
       .pipe(take(1))
       .subscribe({
         next: (res) => this.handleResponse(res.data?.cartLinesUpdate),
@@ -97,15 +100,24 @@ export class CartService {
     }
 
     const shopifyCart = response.cart;
-    const lines: CartLine[] = [];
+    const cartLines: CartLine[] = [];
+
+    const initProductImage = (image: any): ProductImage => {
+      return {
+          src: image.src,
+          altText: image.altText
+        };
+    };
 
     shopifyCart.lines.nodes.forEach((node: any) => {
-      lines.push({
+      cartLines.push({
         id: node.id,
         quantity: node.quantity,
         merchandiseId: node.merchandise.id,
         title: node.merchandise.product.title,
         price: node.cost.totalAmount.amount,
+        featuredImage: initProductImage(node.merchandise.product.featuredImage),
+        handle: node.merchandise.product.handle
       });
     });
 
@@ -114,10 +126,10 @@ export class CartService {
       checkoutUrl: shopifyCart.checkoutUrl,
       totalPrice: shopifyCart.cost.totalAmount.amount,
       totalItems: shopifyCart.totalQuantity,
-      lines: lines,
+      lines: cartLines,
     };
 
     this.cartSubject.next(cart);
-    this.storageService.saveCart(cart.id!);
+    this.storageService.setCartToLocalStorage(cart.id!);
   }
 }

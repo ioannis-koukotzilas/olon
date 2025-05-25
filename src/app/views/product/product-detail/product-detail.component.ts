@@ -81,10 +81,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.product.variants[0].priceV2.amount +
             this.product.variants[0].priceV2.currencyCode;
 
-          // setTimeout(() => {
-
-          // }, 5000);
-
           this.loadingService.set(false);
           this.cd.markForCheck();
         },
@@ -100,107 +96,110 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   }
 
   private initProduct(product: any): Product {
+    const initProductVariants = (variants: any): Variant[] => {
+      const returnValue: Variant[] = [];
+
+      variants.nodes.forEach((node: any) => {
+        const variant: Variant = {
+          id: node.id,
+          priceV2: initVariantPriceV2(node.priceV2),
+          selectedOption: initVariantSelectedOption(node.selectedOptions),
+        };
+
+        returnValue.push(variant);
+      });
+
+      return returnValue;
+    };
+
+    const initVariantPriceV2 = (priceV2: any): PriceV2 => {
+      return {
+        amount: priceV2.amount,
+        currencyCode: priceV2.currencyCode,
+      };
+    };
+
+    const initVariantSelectedOption = (
+      selectedOptions: any
+    ): SelectedOption => {
+      return {
+        name: selectedOptions[0].name,
+        value: selectedOptions[0].value,
+      };
+    };
+
+    const initProductImages = (images: any): ProductImage[] => {
+      const returnValue: ProductImage[] = [];
+
+      images.nodes.forEach((image: any) => {
+        const productImage: ProductImage = {
+          src: image.src,
+          altText: image.altText
+        };
+
+        returnValue.push(productImage);
+      });
+
+      return returnValue;
+    };
+
+    const initHowToUse = (metafields: any[]): HowToUse | null => {
+      if (!metafields) return null;
+
+      const title =
+        metafields.find((x) => x?.key === 'how_to_use_title')?.value ?? null;
+
+      const description =
+        metafields.find((x) => x?.key === 'how_to_use_description')?.value ??
+        null;
+      const imageSrc =
+        metafields.find((x) => x?.key === 'how_to_use_image')?.reference?.image
+          ?.url ?? null;
+
+      if (!title || !description || !imageSrc) {
+        return null;
+      }
+
+      return {
+        title: title,
+        description: description,
+        imageSrc: imageSrc,
+      };
+    };
+
+    const initDetails = (metafields: any[]): Details | null => {
+      if (!metafields) return null;
+
+      const title =
+        metafields.find((x) => x?.key === 'details_title')?.value ?? null;
+
+      const description =
+        metafields.find((x) => x?.key === 'details_description')?.value ?? null;
+
+      const imageSrc =
+        metafields.find((x) => x?.key === 'details_image')?.reference?.image
+          ?.url ?? null;
+
+      if (!title || !description || !imageSrc) {
+        return null;
+      }
+
+      return {
+        title: title,
+        description: description,
+        imageSrc: imageSrc,
+      };
+    };
+
     return {
       id: product.id,
       handle: product.handle,
       title: product.title,
       description: product.description,
-      variants: this.initProductVariants(product.variants),
-      images: this.initProductImages(product.images),
-      howToUse: this.initHowToUse(product.metafields),
-      details: this.initDetails(product.metafields),
-    };
-  }
-
-  private initProductVariants(variants: any): Variant[] {
-    const returnValue: Variant[] = [];
-
-    variants.nodes.forEach((node: any) => {
-      const variant: Variant = {
-        id: node.id,
-        priceV2: this.initVariantPriceV2(node.priceV2),
-        selectedOption: this.initVariantSelectedOption(node.selectedOptions),
-      };
-
-      returnValue.push(variant);
-    });
-
-    return returnValue;
-  }
-
-  private initVariantPriceV2(priceV2: any): PriceV2 {
-    return {
-      amount: priceV2.amount,
-      currencyCode: priceV2.currencyCode,
-    };
-  }
-
-  private initVariantSelectedOption(selectedOptions: any): SelectedOption {
-    return {
-      name: selectedOptions[0].name,
-      value: selectedOptions[0].value,
-    };
-  }
-
-  private initProductImages(images: any): ProductImage[] {
-    const returnValue: ProductImage[] = [];
-
-    images.nodes.forEach((image: any) => {
-      const productImage: ProductImage = {
-        src: image.src,
-      };
-
-      returnValue.push(productImage);
-    });
-
-    return returnValue;
-  }
-
-  private initHowToUse(metafields: any[]): HowToUse | null {
-    if (!metafields) return null;
-
-    const title =
-      metafields.find((x) => x?.key === 'how_to_use_title')?.value ?? null;
-
-    const description =
-      metafields.find((x) => x?.key === 'how_to_use_description')?.value ??
-      null;
-    const imageSrc =
-      metafields.find((x) => x?.key === 'how_to_use_image')?.reference?.image
-        ?.url ?? null;
-
-    if (!title || !description || !imageSrc) {
-      return null;
-    }
-
-    return {
-      title: title,
-      description: description,
-      imageSrc: imageSrc,
-    };
-  }
-
-  private initDetails(metafields: any[]): Details | null {
-    if (!metafields) return null;
-
-    const title =
-      metafields.find((x) => x?.key === 'details_title')?.value ?? null;
-
-    const description =
-      metafields.find((x) => x?.key === 'details_description')?.value ?? null;
-
-    const imageSrc =
-      metafields.find((x) => x?.key === 'details_image')?.reference?.image
-        ?.url ?? null;
-
-    if (!title || !description || !imageSrc) {
-      return null;
-    }
-
-    return {
-      title: title,
-      description: description,
-      imageSrc: imageSrc,
+      variants: initProductVariants(product.variants),
+      images: initProductImages(product.images),
+      howToUse: initHowToUse(product.metafields),
+      details: initDetails(product.metafields),
     };
   }
 
@@ -224,7 +223,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       .addItem(input)
       .pipe(take(1))
       .subscribe({
-        next: () => (this.isAddingToCart = false),
+        next: () => {
+          this.isAddingToCart = false;
+          this.cd.markForCheck();
+        },
         error: () => (this.isAddingToCart = false),
       });
   }

@@ -5,13 +5,16 @@
 }
 
 .app-footer app-logo {
+  max-width: var(--max-w-xxl);
+  margin: 0 auto;
   display: flex;
-  padding: 4.5rem 48px 0;
+  padding: 4.5rem 24px 0;
 }
 
 .app-footer > .wrapper {
-  max-width: var(--max-w-full);
-  padding: 4.5rem 48px;
+  max-width: var(--max-w-xxl);
+  margin: 0 auto;
+  padding: 4.5rem 24px;
 
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);

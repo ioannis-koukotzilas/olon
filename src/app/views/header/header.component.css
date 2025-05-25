@@ -6,7 +6,7 @@
 }
 
 .site-header > .wrapper {
-  max-width: var(--max-w-full);
+  max-width: var(--max-w-xxl);
   margin: 0 auto;
   padding: 24px;
 

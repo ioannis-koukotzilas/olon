@@ -1,3 +1,26 @@
 <ng-container *ngIf="!(loading$ | async)">
   <!-- <p>Page home</p> -->
 </ng-container>
+
+
+<ng-container *ngIf="spotlightSlides && spotlightSlides.length > 0">
+  <div class="swiper spotlight" #spotlightSwiperRef>
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let slide of spotlightSlides">
+        <img class="img" [src]="slide.image.src" [alt]="slide.image.alt">
+
+        <div class="content">
+          <div class="flex-wrapper">
+            <div class="inner-wrapper">
+              <div class="title">{{ slide.title }}</div>
+              <div class="subtitle">{{ slide.subtitle }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+</ng-container>

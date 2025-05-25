@@ -263,7 +263,12 @@ const CART_GET = gql`
             ... on ProductVariant {
               id
               product {
+                handle
                 title
+                featuredImage {
+                  src
+                  altText
+                }
               }
             }
           }
@@ -321,28 +326,28 @@ export class ShopifyService {
     });
   }
 
-  addToCart(cartId: string, lines: CartLineInput[]): Observable<any> {
+  cartLinesAdd(cartId: string, lines: CartLineInput[]): Observable<any> {
     return this.apollo.use('shopify').mutate({
       mutation: CART_LINES_ADD,
       variables: { cartId, lines },
     });
   }
 
-  updateCartLines(cartId: string, lines: CartLineUpdate[]): Observable<any> {
+  cartLinesUpdate(cartId: string, lines: CartLineUpdate[]): Observable<any> {
     return this.apollo.use('shopify').mutate({
       mutation: CART_LINES_UPDATE,
       variables: { cartId, lines },
     });
   }
 
-  removeCartLines(cartId: string, lineIds: string[]): Observable<any> {
+  cartLinesRemove(cartId: string, lineIds: string[]): Observable<any> {
     return this.apollo.use('shopify').mutate({
       mutation: CART_LINES_REMOVE,
       variables: { cartId, lineIds },
     });
   }
 
-  getCart(cartId: string): Observable<any> {
+  cartGet(cartId: string): Observable<any> {
     return this.apollo.use('shopify').query({
       query: CART_GET,
       variables: { cartId },

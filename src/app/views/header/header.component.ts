@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LogoComponent } from '../logo/logo.component';
 import { CartComponent } from '../cart/cart.component';
@@ -32,6 +32,8 @@ export class HeaderComponent {
 
   cartActive: boolean = false;
   mainNavigationPanelActive: boolean = false;
+
+  @ViewChild(CartComponent) cartComponent!: CartComponent;
 
   constructor(
     private translate: TranslateService,
@@ -68,8 +70,8 @@ export class HeaderComponent {
     this.subscription.unsubscribe();
   }
 
-  onCartToggle(): void {
-    this.cartActive = !this.cartActive;
+  onCartOpen(): void {
+    this.cartComponent.cartVisible = true;
   }
 
   onMainNavigationPanelToggle(): void {

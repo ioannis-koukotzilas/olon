@@ -27,6 +27,7 @@ export class SelectedOption {
 
 export class ProductImage {
   src!: string;
+  altText!: string;
 }
 
 export class HowToUse {

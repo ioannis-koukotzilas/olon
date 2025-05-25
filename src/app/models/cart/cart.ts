@@ -1,3 +1,5 @@
+import { ProductImage } from "../product";
+
 export class Cart {
   id?: string;
   checkoutUrl?: string;
@@ -12,5 +14,6 @@ export class CartLine {
   merchandiseId!: string;
   title!: string;
   price!: string;
-  image?: string;
+  featuredImage?: ProductImage;
+  handle!: string;
 }

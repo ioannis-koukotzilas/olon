@@ -1,0 +1,76 @@
+/* .spotlight {
+  width: 100%;
+  height: 100%;
+} */
+
+.spotlight .img {
+  object-fit: cover;
+  width: 100%;
+  height: 50vh;
+}
+
+.spotlight .content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(0, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+.spotlight .content .flex-wrapper {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.spotlight .content .inner-wrapper {
+  flex-grow: 1;
+  max-width: calc(var(--max-w-xxl) - 48px);
+  margin: 0 auto;
+  padding: 3rem 24px;
+}
+
+.spotlight .content .title {
+  font-size: var(--font-3xl);
+  line-height: var(--leading-tight);
+  font-weight: var(--font-regular);
+  color: rgb(var(--primary-50));
+  margin-bottom: 0.75rem;
+}
+
+.spotlight .content .subtitle {
+  color: rgb(var(--primary-50));
+}
+
+/* Animations */
+
+.spotlight .swiper-slide .title,
+.spotlight .swiper-slide .subtitle {
+  visibility: hidden;
+}
+
+.spotlight .swiper-slide.swiper-slide-active .title {
+  animation: spotlight 400ms;
+  animation-delay: 600ms;
+  animation-fill-mode: backwards;
+  visibility: visible;
+}
+
+.spotlight .swiper-slide.swiper-slide-active .subtitle {
+  animation: spotlight 400ms;
+  animation-delay: 1200ms;
+  animation-fill-mode: backwards;
+  visibility: visible;
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
